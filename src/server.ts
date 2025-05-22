@@ -7,6 +7,7 @@ import {
   endpointNotImplemented,
   globalErrorHandler,
 } from "@/middleware/errors.js";
+import { paymentRoutes } from "@/routes/payment.routes.js";
 
 dotenv.config();
 
@@ -34,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
 /*------------- Endpoints -------------*/
-
+app.use("/api/payment", paymentRoutes);
 /**
  * Example endpoint definition:
  *
