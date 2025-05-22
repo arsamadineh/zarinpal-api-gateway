@@ -1,12 +1,11 @@
 import { z } from 'zod';
 
-export const paymentSchema = z.object({
-  body: z.object({
-    merchantId: z.string().min(1),
-    amount: z.number().gt(0),
-    callbackUrl: z.string().url(),
-    description: z.string().optional(),
-  }),
+export const PaymentRequestSchema = z.object({
+  amount: z.number().min(1000), // Minimum amount of 1000 Toman
+  callback_url: z.string().url(),
+  description: z.string().optional(),
+  mobile: z.string().optional(),
+  email: z.string().email().optional(),
 });
 
-export type PaymentRequest = z.infer<typeof paymentSchema>;
+export type PaymentRequestSchema = z.infer<typeof PaymentRequestSchema>;

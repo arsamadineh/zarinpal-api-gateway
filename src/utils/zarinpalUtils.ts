@@ -1,20 +1,18 @@
-// Replace with actual Zarinpal API endpoint
-const ZARINPAL_API_URL = 'https://api.zarinpal.com/pg/v4/payment/request.json';
+import { PaymentRequestSchema } from '../schemas/paymentSchema';
+import { HttpError } from './errors/HttpError';
 
-interface ZarinpalResponse {
+const ZARINPAL_API_URL = 'https://api.zarinpal.com/pg/v4/payment/request.json'; // Replace with the correct Zarinpal API URL
+const MERCHANT_ID = process.env.ZARINPAL_MERCHANT_ID || 'YOUR_ZARINPAL_MERCHANT_ID'; // Replace with your Zarinpal Merchant ID
+
+interface ZarinpalRequestResponse {
   data: {
-    code: number;
-    message: string;
     authority: string;
-  };
-  errors: {
     code: number;
-    message: string;
-  } | null;
-  status: number;
+  };
+  errors: string[];
 }
 
-export async function generatePaymentRequest(merchantId: string, amount: number, callbackUrl: string, description: string): Promise<{ status: number; authority: string; errors: any }> {
+export async function requestPayment(data: PaymentRequestSchema): Promise<{ authority: string; code: number }> {
   try {
     const response = await fetch(ZARINPAL_API_URL, {
       method: 'POST',
@@ -22,22 +20,30 @@ export async function generatePaymentRequest(merchantId: string, amount: number,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        merchant_id: merchantId,
-        amount: amount,
-        callback_url: callbackUrl,
-        description: description,
+        merchant_id: MERCHANT_ID,
+        amount: data.amount,
+        callback_url: data.callback_url,
+        description: data.description,
+        mobile: data.mobile,
+        email: data.email,
       }),
     });
 
-    const data: ZarinpalResponse = await response.json();
-
-    if (data.data.code === 100) {
-      return { status: data.data.code, authority: data.data.authority, errors: null };
-    } else {
-      return { status: data.errors?.code || -1, authority: '', errors: data.errors };
+    if (!response.ok) {
+      throw new HttpError(500, `Zarinpal request failed with status: ${response.status}`);
     }
+
+    const result: ZarinpalRequestResponse = await response.json();
+
+    if (result.data.code !== 100) {
+      throw new HttpError(400, `Zarinpal request failed with code: ${result.data.code}`);
+    }
+
+    return { authority: result.data.authority, code: result.data.code };
   } catch (error: any) {
-    console.error("Error calling Zarinpal API:", error);
-    throw new Error(`Failed to generate payment request: ${error.message}`);
+    console.error('Zarinpal request error:', error);
+    throw new HttpError(500, error.message || 'Failed to request payment from Zarinpal');
   }
 }
+
+// Implement verification, reversal, and inquiry functions similarly
