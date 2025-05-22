@@ -1,6 +1,6 @@
 import express from 'express';
 import { paymentController } from '../controllers/paymentController';
-import { validatePayment } from '../middlewares/zarinpalMiddleware';
+import { validatePayment } from '../middlewares/paymentMiddleware';
 
 const router = express.Router();
 
