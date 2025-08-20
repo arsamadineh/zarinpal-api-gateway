@@ -32,29 +32,14 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-// Apply the rate limiting middleware to all requests
-app.use(limiter);
-
-// Basic security headers
-app.use(helmet());
-
 // CORS configuration
 const corsOptions = {
   origin: NODE_ENV === "development" ? "*" : "https://your-production-domain.com", // TODO: replace with your production domain
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
-app.use(cors(corsOptions));
 
 // IP Blocking - TODO: Implement a more robust IP blocking mechanism, potentially using a database to store blocked IPs.
 const blockedIPs = process.env.BLOCKED_IPS ? process.env.BLOCKED_IPS.split(',') : [];
-
-app.use((req, res, next) => {
-  const clientIP = req.ip || req.socket.remoteAddress;
-  if (clientIP && blockedIPs.includes(clientIP)) {
-    return res.status(403).send('Your IP is blocked.');
-  }
-  next();
-});
 
 /*------------- Middlewares -------------*/
 app.use(
@@ -66,14 +51,24 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: false }));
+app.use(cors(corsOptions));
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
+
+// Basic security headers
+app.use(helmet());
+
+app.use((req, res, next) => {
+  const clientIP = req.ip || req.socket.remoteAddress;
+  if (clientIP && blockedIPs.includes(clientIP)) {
+    return res.status(403).send('Your IP is blocked.');
+  }
+  next();
+});
 
 /*------------- Endpoints -------------*/
 app.use("/api/payment", paymentRoutes);
-/**
- * Example endpoint definition:
- *
- * app.use("/api/user", userRouter);
- */
 
 /*------------- Error middleware -------------*/
 app.use(endpointNotImplemented);
