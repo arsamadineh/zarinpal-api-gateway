@@ -1,52 +1,52 @@
-# Express.js TypeScript Project Created with Vratix
+# پروژه Express.js با TypeScript ساخته شده با Vratix
 
-## Features
+## ویژگی‌ها
 
-- Express.js with TypeScript
-- Common Error objects
-- Error middleware
-- Response object for structured API responses
-- Test configuration and coverage using Vitest 
-- Common scripts to run and test your APIs
-- Hot-reloading for development
+- Express.js با TypeScript
+- آبجکت‌های خطای رایج
+- میان‌افزار خطا
+- آبجکت پاسخ برای پاسخ‌های ساختاریافته API
+- پیکربندی تست و پوشش با استفاده از Vitest
+- اسکریپت‌های رایج برای اجرا و تست API‌های شما
+- بارگذاری مجدد سریع (Hot-reloading) برای توسعه
 
-## Prerequisites
+## پیش‌نیازها
 
-- Node.js 20 or higher
-- npm, pnpm or yarn
-- Docker (optional)
+- Node.js نسخه 20 یا بالاتر
+- npm، pnpm یا yarn
+- Docker (اختیاری)
 
-## Getting Started
+## شروع به کار
 
-### Local Development
+### توسعه محلی
 
-1. Install dependencies:
+۱. نصب وابستگی‌ها:
 ```bash
 npm install
 ```
 
-2. Start development server:
+۲. شروع سرور توسعه:
 ```bash
 npm run dev:local
 ```
 
-The server will start on `http://localhost:3000` with hot-reloading enabled.
+سرور روی `http://localhost:3000` با قابلیت بارگذاری مجدد سریع (hot-reloading) شروع به کار خواهد کرد.
 
-### Production Build
+### ساخت برای تولید
 
 ```bash
 npm run build:prod
 npm run prod:serve
 ```
 
-## Scripts
+## اسکریپت‌ها
 
-- `npm run dev:local` - Start local development server with hot-reload
-- `npm run build:prod` - Build for production
-- `npm run prod:serve` - Run production server
-- `npm run test` - Run tests
-- `npm run coverage` - Run tests with coverage report
+- `npm run dev:local` - شروع سرور توسعه محلی با بارگذاری مجدد سریع
+- `npm run build:prod` - ساخت برای تولید
+- `npm run prod:serve` - اجرای سرور تولید
+- `npm run test` - اجرای تست‌ها
+- `npm run coverage` - اجرای تست‌ها با گزارش پوشش
 
-## License
+## مجوز
 
 [MIT](./LICENSE)
