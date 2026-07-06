@@ -1,39 +1,65 @@
 {
-  "name": "express-js-starter-ts",
+  "name": "@zarinpal/gateway",
+  "description": "Production-grade Zarinpal Payment Gateway - Express/Fastify/Hono support with sandbox mode",
+  "version": "2.0.0",
   "license": "MIT",
-  "version": "1.0.0",
-  "private": true,
-  "main": "src/server.ts",
   "type": "module",
+  "main": "dist/core/index.js",
+  "types": "dist/core/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    },
+    "./express": {
+      "types": "./dist/adapters/express.d.ts",
+      "import": "./dist/adapters/express.js"
+    },
+    "./fastify": {
+      "types": "./dist/adapters/fastify.d.ts",
+      "import": "./dist/adapters/fastify.js"
+    },
+    "./hono": {
+      "types": "./dist/adapters/hono.d.ts",
+      "import": "./dist/adapters/hono.js"
+    }
+  },
   "scripts": {
+    "dev": "tsup --watch --onSuccess 'node dist/examples/express-server.js'",
+    "build": "tsup",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
-    "dev:local": "tsup --watch --onSuccess 'npm run local:serve'",
-    "dev:docker": "tsup --watch --onSuccess 'npm run docker:serve'",
-    "local:serve": "pkill -f 'node dist/server.js'; node dist/server.js &",
-    "docker:serve": "if [ -f /tmp/server.pid ]; then kill -9 $(cat /tmp/server.pid); fi; node dist/server.js & echo $! > /tmp/server.pid",
-    "clean": "rimraf ./dist",
-    "prebuild:prod": "npm run clean",
-    "build:prod": "NODE_ENV=production tsup",
-    "prod:serve": "node dist/server.js"
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublish": "npm run clean && npm run build"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.21.0",
-    "express-rate-limit": "^8.0.1",
-    "helmet": "^8.0.0",
-    "jsonwebtoken": "^9.0.2",
-    "zod": "^4.0.17"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.6",
     "@types/node": "^22.7.4",
     "@vitest/coverage-istanbul": "^3.0.8",
-    "ts-node": "^10.9.2",
+    "cors": "^2.8.6",
+    "express": "^4.21.0",
+    "fastify": "^5.0.1",
+    "helmet": "^8.2.0",
+    "hono": "^4.6.0",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2",
     "vitest": "^3.0.8"
-  }
+  },
+  "keywords": [
+    "zarinpal",
+    "payment-gateway",
+    "iran",
+    "payment",
+    "express",
+    "fastify",
+    "hono",
+    "typescript"
+  ],
+  "repository": "https://github.com/arsamadineh/zarinpal-api-gateway",
+  "author": "Arsam Adineh"
 }
